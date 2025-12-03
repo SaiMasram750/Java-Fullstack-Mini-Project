@@ -1,50 +1,50 @@
 package com.taskmanager.controller;
 
 import com.taskmanager.model.Task;
-import com.taskmanager.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/api/tasks")
 @CrossOrigin(origins = "*")
 public class TaskController {
     
-    @Autowired
-    private TaskRepository taskRepository;
+    private final List<Task> tasks = new ArrayList<>();
+    private final AtomicLong idGenerator = new AtomicLong(1);
     
     @GetMapping
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        return tasks;
     }
     
     @PostMapping
     public Task createTask(@RequestBody Task task) {
-        return taskRepository.save(task);
+        task.setId(idGenerator.getAndIncrement());
+        tasks.add(task);
+        return task;
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
-        return taskRepository.findById(id)
+        return tasks.stream()
+            .filter(task -> task.getId().equals(id))
+            .findFirst()
             .map(task -> {
                 task.setTitle(taskDetails.getTitle());
                 task.setDescription(taskDetails.getDescription());
                 task.setCompleted(taskDetails.isCompleted());
-                return ResponseEntity.ok(taskRepository.save(task));
+                return ResponseEntity.ok(task);
             })
             .orElse(ResponseEntity.notFound().build());
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable Long id) {
-        return taskRepository.findById(id)
-            .map(task -> {
-                taskRepository.delete(task);
-                return ResponseEntity.ok().build();
-            })
-            .orElse(ResponseEntity.notFound().build());
+        boolean removed = tasks.removeIf(task -> task.getId().equals(id));
+        return removed ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }

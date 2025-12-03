@@ -1,6 +1,6 @@
 # Task Manager
 
-A simple task management application built with Spring Boot and vanilla JavaScript.
+A simple stateless task management application built with Spring Boot and vanilla JavaScript.
 
 ## Features
 
@@ -8,12 +8,14 @@ A simple task management application built with Spring Boot and vanilla JavaScri
 - Mark tasks as complete/incomplete
 - Clean and modern UI
 - RESTful API backend
+- **Stateless**: Tasks are stored in memory and reset on restart
 
 ## Technologies
 
-- **Backend**: Spring Boot 3.2.0, Spring Data JPA, H2 Database
+- **Backend**: Spring Boot 3.2.0
 - **Frontend**: HTML, CSS, JavaScript
 - **Build Tool**: Maven
+- **Storage**: In-memory (stateless)
 
 ## Getting Started
 
@@ -26,8 +28,8 @@ A simple task management application built with Spring Boot and vanilla JavaScri
 
 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd task-manager
+git clone https://github.com/SaiMasram750/Java-Fullstack-Mini-Project.git
+cd Java-Fullstack-Mini-Project
 ```
 
 2. Run the application
@@ -44,9 +46,6 @@ mvn spring-boot:run
 - `PUT /api/tasks/{id}` - Update a task
 - `DELETE /api/tasks/{id}` - Delete a task
 
-## Database
+## Note
 
-The application uses an in-memory H2 database. You can access the H2 console at `http://localhost:8080/h2-console` with:
-- JDBC URL: `jdbc:h2:mem:taskdb`
-- Username: `sa`
-- Password: (leave empty)
+This is a stateless application - all tasks are stored in memory and will be lost when the application restarts. This makes it perfect for demos and testing without needing a database setup.
