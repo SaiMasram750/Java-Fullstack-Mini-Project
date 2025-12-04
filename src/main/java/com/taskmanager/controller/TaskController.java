@@ -24,6 +24,9 @@ public class TaskController {
     @PostMapping
     public Task createTask(@RequestBody Task task) {
         task.setId(idGenerator.getAndIncrement());
+        if (task.getStatus() == null) task.setStatus("PENDING");
+        if (task.getPriority() == null) task.setPriority("MEDIUM");
+        if (task.getTimeSpent() == null) task.setTimeSpent(0);
         tasks.add(task);
         return task;
     }
@@ -36,7 +39,23 @@ public class TaskController {
             .map(task -> {
                 task.setTitle(taskDetails.getTitle());
                 task.setDescription(taskDetails.getDescription());
-                task.setCompleted(taskDetails.isCompleted());
+                task.setStatus(taskDetails.getStatus());
+                task.setPriority(taskDetails.getPriority());
+                task.setTimeEstimate(taskDetails.getTimeEstimate());
+                task.setTimeSpent(taskDetails.getTimeSpent());
+                task.setDueDate(taskDetails.getDueDate());
+                return ResponseEntity.ok(task);
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Task> updateTaskStatus(@PathVariable Long id, @RequestBody String status) {
+        return tasks.stream()
+            .filter(task -> task.getId().equals(id))
+            .findFirst()
+            .map(task -> {
+                task.setStatus(status);
                 return ResponseEntity.ok(task);
             })
             .orElse(ResponseEntity.notFound().build());

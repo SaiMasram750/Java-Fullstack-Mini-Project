@@ -36,3 +36,6 @@ build/
 
 ### Windows ###
 Thumbs.db
+
+# Maven source files
+apache-maven-3.9.11-src/
