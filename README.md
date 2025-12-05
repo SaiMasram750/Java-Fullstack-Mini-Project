@@ -1,3 +1,9 @@
+#Student Detail 
+Name:  Sai Changdas Masram
+Roll no:68
+Batch :A4
+Branch:Computer Technology
+Lab : Java FSD
 # 📋 Task Management Board - Trello Style
 
 A professional Trello-like task management application with drag-and-drop, time tracking, and priority management. Built with Spring Boot and vanilla JavaScript.
